@@ -8,7 +8,10 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
 ADD ./apt/ubuntu-sources.list /etc/apt/sources.list
+RUN apt-get update -q
+RUN apt-get -y install curl software-properties-common wget
 
+  
 # Use baseimage-docker's init system
 CMD ["/sbin/my_init"]
 
@@ -32,8 +35,8 @@ RUN \
   apt-get upgrade -y && \
   apt-get dist-upgrade -y
 
-# Install Common Dependencies
-RUN apt-get -y install curl software-properties-common
+# Install Unifi-Video-Controller
+
 RUN apt-get install -q -y unifi-video
 
 VOLUME /var/lib/unifi-video
