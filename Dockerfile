@@ -37,13 +37,10 @@ RUN \
 
 # Install Unifi-Video-Controller
 
-RUN apt-get install -q -y unifi-video
+RUN apt-get install -y unifi-video
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
-
-# Wipe out auto-generated data
-RUN rm -rf /var/lib/unifi-video/*
 
 EXPOSE  7447 1935 7443 7080 6666 80 443 554
 
