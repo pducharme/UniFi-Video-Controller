@@ -37,7 +37,7 @@ RUN \
 
 # Install Unifi-Video-Controller
 
-RUN apt-get install -y unifi-video
+RUN apt-get install -y unifi-video --force-yes
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
