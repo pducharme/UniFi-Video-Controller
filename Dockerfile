@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.17
 MAINTAINER pducharme@me.com
 # Set correct environment variables
 ENV HOME /root
