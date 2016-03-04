@@ -42,7 +42,7 @@ RUN apt-get install -y unifi-video --force-yes
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
 
-EXPOSE  1935 7443 7445 7446 7447 7080 6666 80 443 554
+EXPOSE  7443 7445 7446 7447 7080 6666
 
 WORKDIR /usr/lib/unifi-video
 
