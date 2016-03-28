@@ -35,7 +35,7 @@ RUN \
   apt-get upgrade -y && \
   apt-get dist-upgrade -y
 
-# Install Unifi-Video-Controller
+# Install Unifi-Video-Controller (3.2.0)
 
 RUN apt-get install -y unifi-video --force-yes
 
