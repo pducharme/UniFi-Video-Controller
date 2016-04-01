@@ -1,4 +1,5 @@
-FROM phusion/baseimage:0.9.18
+#FROM phusion/baseimage:0.9.18
+FROM zittix/docker-baseimage-java8:latest
 MAINTAINER pducharme@me.com
 # Set correct environment variables
 ENV HOME /root
