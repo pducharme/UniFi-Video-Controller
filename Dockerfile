@@ -1,5 +1,5 @@
-#FROM phusion/baseimage:0.9.18
-FROM zittix/docker-baseimage-java8:latest
+FROM phusion/baseimage:0.9.18
+# FROM zittix/docker-baseimage-java8:latest (Test to use Java8 instead of 7)
 MAINTAINER pducharme@me.com
 # Set correct environment variables
 ENV HOME /root
@@ -36,7 +36,7 @@ RUN \
   apt-get upgrade -y && \
   apt-get dist-upgrade -y
 
-# Install Unifi-Video-Controller (3.2.0)
+# Install Unifi-Video-Controller (latest)
 
 RUN apt-get install -y unifi-video --force-yes
 
