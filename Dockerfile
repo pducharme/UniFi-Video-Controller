@@ -37,8 +37,12 @@ RUN \
   apt-get dist-upgrade -y
 
 # Install Unifi-Video-Controller (latest)
+# Install command only for upcoming version 3.3.0.  Current version 3.2.1 can't be install using apt-get.
+#RUN apt-get install -y unifi-video --force-yes
+# Temporarely install manually the version 3.2.1 using wget and dpkg.
 
-RUN apt-get install -y unifi-video --force-yes
+RUN wget http://dl.ubnt.com/firmwares/unifi-video/3.2.1/unifi-video_3.2.1-Ubuntu14.04_amd64.deb
+RUN sudo dpkg -i unifi-video_3.2.1-Ubuntu14.04_amd64.deb
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
