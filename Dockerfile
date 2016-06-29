@@ -41,8 +41,8 @@ RUN \
 #RUN apt-get install -y unifi-video --force-yes
 # Temporarely install manually the version 3.2.1 using wget and dpkg.
 RUN apt-get install -y ca-certificates-java fontconfig-config fonts-dejavu-core java-common jsvc libasyncns0 libavahi-client3 libavahi-common-data libavahi-common3 libcommons-daemon-java libcups2 libflac8 libfontconfig1 libfreetype6 libjpeg-turbo8 libjpeg8 liblcms2-2 libnspr4 libnss3 libnss3-nssdb libogg0 libpcsclite1 libpulse0 libsctp1 libsndfile1 libvorbis0a libvorbisenc2 libxau6 libxcb1 libxdmcp6 lksctp-tools mongodb-10gen openjdk-7-jre-headless tzdata-java --force-yes
-RUN wget http://dl.ubnt.com/firmwares/unifi-video/3.2.2/unifi-video_3.2.2~Ubuntu14.04_amd64.deb
-RUN sudo dpkg -i unifi-video_3.2.2~Ubuntu14.04_amd64.deb
+RUN wget http://dl.ubnt.com/firmwares/unifi-video/3.3.0/unifi-video_3.3.0~Ubuntu14.04_amd64.deb
+RUN sudo dpkg -i unifi-video_3.3.0~Ubuntu14.04_amd64.deb
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
