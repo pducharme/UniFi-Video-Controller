@@ -1,5 +1,4 @@
-FROM phusion/baseimage:0.9.19
-# FROM zittix/docker-baseimage-java8:latest (Test to use Java8 instead of 7)
+FROM phusion/baseimage:latest
 MAINTAINER pducharme@me.com
 # Set correct environment variables
 ENV HOME /root
@@ -25,21 +24,17 @@ CMD ["/sbin/my_init"]
 
 
 #Update APT-GET list
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 16126D3A3E5C1192
-RUN 	apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10 && \
-    echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
-#RUN 	wget -q -O -  http://www.ubnt.com/downloads/unifi-video/apt/unifi-video.gpg.key | apt-key add - && \
-# echo "deb [arch=amd64] http://www.ubnt.com/downloads/unifi-video/apt trusty ubiquiti" | tee /etc/apt/sources.list.d/ubiquity-video.list
- 
-RUN \
-  apt-get update -q && \
-  apt-get upgrade -y && \
-  apt-get dist-upgrade -y
+RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"
+#RUN apt-get update && apt-get upgrade -y -o Dpkg::Options::="--force-confold"&& apt-get dist-upgrade -y
 
-# Installing Depedencies
-RUN apt-get install -y ca-certificates-java fontconfig-config fonts-dejavu-core java-common jsvc libasyncns0 libavahi-client3 libavahi-common-data libavahi-common3 libcommons-daemon-java libcups2 libflac8 libfontconfig1 libfreetype6 libjpeg-turbo8 libjpeg8 liblcms2-2 libnspr4 libnss3 libnss3-nssdb libogg0 libpcsclite1 libpulse0 libsctp1 libsndfile1 libvorbis0a libvorbisenc2 libxau6 libxcb1 libxdmcp6 lksctp-tools mongodb-10gen openjdk-8-jre-headless tzdata-java --force-yes
+# Installing Depedencies & UniFi Video
+RUN apt-get install -y mongodb-server openjdk-8-jre-headless jsvc sudo
 RUN wget http://dl.ubnt.com/firmwares/unifi-video/3.6.0/unifi-video_3.6.0~Ubuntu16.04_amd64.deb
 RUN sudo dpkg -i unifi-video_3.6.0~Ubuntu16.04_amd64.deb
+RUN apt-get update && apt-get -f install
+
+#RUN apt-get install -y ca-certificates-java fontconfig-config fonts-dejavu-core java-common jsvc libasyncns0 libavahi-client3 libavahi-common-data libavahi-common3 libcommons-daemon-java libcups2 libflac8 libfontconfig1 libfreetype6 libjpeg-turbo8 libjpeg8 liblcms2-2 libnspr4 libnss3 libnss3-nssdb libogg0 libpcsclite1 libpulse0 libsctp1 libsndfile1 libvorbis0a libvorbisenc2 libxau6 libxcb1 libxdmcp6 lksctp-tools mongodb-10gen openjdk-8-jre-headless tzdata-java --force-yes
+
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
