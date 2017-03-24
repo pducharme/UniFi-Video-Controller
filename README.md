@@ -20,6 +20,6 @@ docker run \
         -p 6666:6666 \
 	-v <data dir>:/var/lib/unifi-video \
         -v <videos dir>:/usr/lib/unifi-video/data/videos \
-        -v <logs dir>:/var/log/unifi-video  \
+        -v <logs dir>:/var/log/unifi-video \
         pducharme/unifi-video-controller
 ```
