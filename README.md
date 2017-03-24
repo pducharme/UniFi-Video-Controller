@@ -2,7 +2,9 @@
 
 This is a docker for use on Unraid 6.x for the UniFi-Video controller.
 
-On first run, the file `system.properties` will be created in your data directory, *you* must add `is_default=true` as the first line in order to force the wizard to run. If the file isn't created automatically, create it yourself.
+Set your local data, videos and logs directories in the `docker run` command.
+
+The first run should create the file `system.properties` in your data directory. If it doesn't, create it yourself. *You* must add `is_default=true` as the first line in order to force the wizard to run.
 
 Restart the docker, visit http://localhost:7080 and you'll start the Unifi Video wizard.
 
