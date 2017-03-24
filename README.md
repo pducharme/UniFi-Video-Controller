@@ -6,7 +6,7 @@ Set your local data, videos and logs directories in the `docker run` command.
 
 The first run should create the file `system.properties` in your data directory. If it doesn't, create it yourself. *You* must add `is_default=true` as the first line in order to force the wizard to run.
 
-Restart the docker, visit http://localhost:7080 and you'll start the Unifi Video wizard.
+Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to start the Unifi Video wizard.
 
 ## Run it
 ```
