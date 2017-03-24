@@ -9,8 +9,15 @@ After that, restart the docker and you'll be great by the Unifi-Video wizard tha
 ## Run it
 ```
 docker run \
-        -p 7443:7443 -p 7445:7445 -p 7446:7446 -p 7447:7447 -p 7080:7080 -p 6666:6666 \
-	-v unifi_data:/var/lib/unifi-video -v unifi_videos:/usr/lib/unifi-video/data/videos -v unifi_logs:/var/log/unifi-video  \
         --name unifi-video \
-        pducharme/unifi-video-controller \
+        -p 7443:7443 \
+        -p 7445:7445 \
+        -p 7446:7446 \
+        -p 7447:7447 \
+        -p 7080:7080 \
+        -p 6666:6666 \
+	-v <data dir>:/var/lib/unifi-video \
+        -v <videos dir>:/usr/lib/unifi-video/data/videos \
+        -v <logs dir>:/var/log/unifi-video  \
+        pducharme/unifi-video-controller
 ```
