@@ -12,6 +12,7 @@ Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to 
 ```
 docker run \
         --name unifi-video \
+        --privileged \
         -p 7443:7443 \
         -p 7445:7445 \
         -p 7446:7446 \
