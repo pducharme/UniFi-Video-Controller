@@ -21,12 +21,11 @@ RUN apt-get install -y apt-utils wget sudo moreutils
 RUN apt-get install -y mongodb-server openjdk-8-jre-headless jsvc
 RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.2/unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 RUN dpkg -i unifi-video_3.6.2~Ubuntu16.04_amd64.deb
-RUN apt-get -f install
-RUN dpkg -i unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
 
+# Ports
 EXPOSE  7443 7445 7446 7447 7080 6666
 
 WORKDIR /usr/lib/unifi-video
