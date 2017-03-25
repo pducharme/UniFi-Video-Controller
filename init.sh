@@ -25,5 +25,4 @@ fi
 # Set group users to specified group id (non unique)
 groupmod -o -g "${PGID}" unifi-video &>/dev/null
 
-# Run java daemon as user unify-video
-su -c "/run.sh" unifi-video
+exec /run.sh

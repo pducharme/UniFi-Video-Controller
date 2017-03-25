@@ -1,0 +1,320 @@
+#!/bin/sh
+# Ubiquiti unifi-video service script            -*- shell-script -*-
+# Copyright (c) 2013-2015 Ubiquiti Networks, Inc. http://www.ubnt.com
+# vim: ft=sh
+
+set -e
+
+NAME=unifi-video
+PKGUSER=unifi-video
+
+BASEDIR="/usr/lib/${NAME}"
+DATADIR="${BASEDIR}/data"
+PIDFILE="/var/run/${NAME}/${NAME}.pid"
+TMPFS_DIR="/var/cache/${NAME}"
+
+MAINCLASS="com.ubnt.airvision.Main"
+MAINJAR="${BASEDIR}/lib/airvision.jar"
+
+ENABLE_TMPFS=yes
+TMPFS_SIZE=15%
+
+UFV_VERBOSE=
+UFV_DEBUG=
+UFV_DAEMONIZE=true
+
+# Default java heap to be 2048M if this is an NVR appliance
+if grep "ubnt" /proc/version >/dev/null 2>&1; then
+  JVM_MAX_HEAP_SZ="2048M"
+else
+  JVM_MAX_HEAP_SZ=`free -m | awk 'NR==2{printf "%dM\n", $2*0.26 }'`
+fi
+
+log_error() {
+	printf >2& "ERROR: $@\n"
+}
+
+log_verbose() {
+	[ -z "${UFV_VERBOSE}" ] || printf "$@\n"
+}
+
+log_debug() {
+	[ -z "${UFV_DEBUG}" ] || printf "$@\n"
+}
+
+log() {
+	printf "$@\n"
+}
+
+is_java7_compat() {
+	local J V
+        J=$1
+        V=$($J -version 2>&1 |awk -F\" '{print $2}') 
+        case "$V" in
+                1.7*|1.8*) return 0
+                ;;
+        esac
+        return 1
+}
+
+java_autodetect() {
+	JAVA=$(readlink -e $(which java))
+	JAVA_HOME=
+
+	for f in $1 ${JAVA} /usr/lib/jvm/*/bin/java; do
+		if is_java7_compat $f; then
+			JAVA_HOME=$(dirname $(dirname $f))
+			JAVA=$f
+			break
+		fi
+	done
+}
+
+prepare_tmpfs() {
+	local DIR SIZE PKGUSERID MNT_OPTIONS
+        DIR=$1
+        SIZE=$2
+        PKGUSERID=$(id -u ${PKGUSER})
+        MNT_OPTIONS="noatime,nodiratime,noexec,size=${SIZE},mode=0777"
+        [ -z "${PKGUSERID}" ] || MNT_OPTIONS="${MNT_OPTIONS},uid=${PKGUSERID}"
+
+        mkdir -p ${DIR} || true
+        if mountpoint -q ${DIR}; then
+                mount -o remount,${MNT_OPTIONS} ${DIR}
+        else
+                mount -t tmpfs -o ${MNT_OPTIONS} tmpfs ${DIR}
+        fi
+}
+
+
+require_root() {
+	[ -z "${EUID}" ] && EUID=$(id -u)
+	if [ "x${EUID}" != "x0" ]; then
+		log_error "This program requires administrative privileges."
+		exit 1
+	fi
+}
+
+pidfile_info() {
+	local pidfile pid
+	pidfile=$1
+	[ -r "${pidfile}" ] || return 4
+
+	read pid < "${pidfile}"
+	if $(kill -0 "${pid}" 2>/dev/null); then
+		printf "${pid}"
+		return 0
+	elif $(ps "${pid}" >/dev/null 2>&1); then
+		printf "${pid}"
+		return 0
+	else
+		return 1
+	fi
+
+	return 4
+}
+
+is_service_pid() {
+	local pid
+	pid=$1
+	if grep "${MAINCLASS}" /proc/${pid}/cmdline >/dev/null 2>&1; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+is_service_running() {
+	local pidfile pid rc PIDOF pids
+	pidfile=$1
+	rc=0
+	pid=$(pidfile_info "${pidfile}") || rc=$?
+	if [ "$rc" = "0" ]; then
+		if is_service_pid "${pid}"; then
+			echo "${pid}"
+			return 0
+		else
+			rm -f "${pidfile}" || true
+			return 1
+		fi
+	else
+		# pidfile is either missing or invalid
+		rm -f "${pidfile}" || true
+		# try pidof if it exists
+		PIDOF=$(command -v pidof 2>/dev/null)
+		[ -z "${PIDOF}" ] && return 1
+		pids=$(${PIDOF} ${JSVC})
+		for pid in ${pids}; do
+			if is_service_pid "${pid}"; then
+				echo "${pid}"
+				return 0
+			fi
+		done
+		return 1
+	fi
+}
+
+usage() {
+	printf \
+"unifi-video service utility, (c) 2013-2015 Ubiquiti Networks, Inc.\n\
+Usage: $(basename $0) [options] <start|stop>\n\
+\t-h,--help    \tprint this help and quit\n\
+\t-D,--nodetach\tdon't detach from parent process\n\
+\t-v,--version \tprint version and quit\n\n\
+The following environment variables can be used to tune service parameters:\n\
+\tJAVA_HOME\tpreferred Java environment\n\
+\tJVM_MX\tmaximum heap size for JVM (see java -Xmx option for valid values)\n\
+\t
+"
+}
+
+# rudimentary option parsing
+ACTION=help
+for arg in $@; do
+	case "${arg}" in
+	start|stop|status)
+		ACTION=${arg}
+		;;
+	-h|--help)
+		ACTION=help
+		;;
+	-g|--verbose)
+		UFV_VERBOSE=true
+		;;
+	-D|--nodetach)
+		UFV_DAEMONIZE=false
+		;;
+	--debug)
+		UFV_DEBUG=true
+		;;
+	-v|-V|--version)
+		ACTION=version
+		;;
+	esac
+done
+
+if [ "x${ACTION}" = "xhelp" ]; then
+	usage
+	exit 1
+fi
+
+[ -n "${JAVA_HOME}" ] && ENV_JAVA="${JAVA_HOME}"/bin/java
+java_autodetect ${ENV_JAVA}
+
+if [ -z "$JAVA_HOME" ]; then
+	log_error "no suitable Java 7 (or later) environment found!"
+        exit 1
+fi
+
+log_debug "Java Runtime: ${JAVA_HOME}"
+
+JSVC=$(command -v jsvc)
+if [ $? -ne 0 ]; then
+        log_error "jsvc is missing!"
+        exit 1
+fi
+log_debug "JSVC: ${JSVC}"
+
+[ -z "${JVM_MX}" ] && JVM_MX=${JVM_MAX_HEAP_SZ}
+[ -z "${JVM_JMXREMOTE_PORT}" ] && JVM_JMXREMOTE_PORT=7654
+JSVC_EXTRA_OPTS=
+[ -f /etc/default/${NAME} ] && . /etc/default/${NAME}
+
+if [ -n "${AV_DATADIR}" ]; then
+	DATADIR="${AV_DATADIR}"
+        JSVC_EXTRA_OPTS="${JSVC_EXTRA_OPTS} -Dav.datadir=${AV_DATADIR}"
+fi
+
+if [ "x${ENABLE_TMPFS}" = "xyes" ]; then
+        JSVC_EXTRA_OPTS="${JSVC_EXTRA_OPTS} -Dav.tempdir=${TMPFS_DIR}"
+fi
+
+[ -e /dev/urandom ] && \
+        JVM_EXTRA_OPTS="-Djava.security.egd=file:/dev/./urandom ${JVM_EXTRA_OPTS}"
+
+JVM_OPTS="${JVM_EXTRA_OPTS} \
+ -Xmx${JVM_MX} \
+ -Djava.library.path=${BASEDIR}/lib \
+ -Djava.awt.headless=true \
+ -Dfile.encoding=UTF-8"
+
+# check whether jsvc requires -cwd option
+if ${JSVC} -java-home ${JAVA_HOME} -cwd / -help >/dev/null 2>&1; then
+        JSVC_OPTS="${JSVC_OPTS} -cwd ${BASEDIR}"
+fi
+
+if [ -n "${UFV_DEBUG}" ]; then
+	JSVC_OPTS="${JSVC_OPTS} -debug"
+	JVM_OPTS="${JVM_OPTS} \
+		 -Dcom.sun.management.jmxremote \
+		 -Dcom.sun.management.jmxremote.ssl=false \
+		 -Dcom.sun.management.jmxremote.authenticate=false \
+		 -Dcom.sun.management.jmxremote.port=${JVM_JMXREMOTE_PORT}"
+	[ -z "${JVM_JMXREMOTE_HOST}" ] && \
+		JVM_JMXREMOTE_HOST=$(hostname -i | cut -d' ' -f1)
+	[ -z "${JVM_JMXREMOTE_HOST}" ] || \
+		JVM_OPTS="${JVM_OPTS} -Djava.rmi.server.hostname=${JVM_JMXREMOTE_HOST}"
+
+fi
+[ "x${UFV_DAEMONIZE}" != "xtrue" ] && JSVC_OPTS="${JSVC_OPTS} -nodetach"
+
+JSVC_OPTS="${JSVC_OPTS} \
+ -user ${PKGUSER} \
+ -home ${JAVA_HOME} \
+ -cp /usr/share/java/commons-daemon.jar:${MAINJAR} \
+ -pidfile ${PIDFILE} \
+ -procname ${NAME} \
+ ${JSVC_EXTRA_OPTS} \
+ ${JVM_OPTS}"
+
+
+log_debug "\nJVM options: ${JSVC_EXTRA_OPTS} ${JVM_OPTS}"
+log_debug "\nJSVC options: ${JSVC_OPTS}"
+
+case $ACTION in
+	start)
+		require_root
+        echo 0x10 > /proc/self/coredump_filter
+		if is_service_running "${PIDFILE}" >/dev/null; then
+			log_verbose "${NAME} is already running..."
+		else
+			[ -d /var/run/${NAME} ] || mkdir -p /var/run/${NAME}
+			[ "x${ENABLE_TMPFS}" = "xyes" ] && prepare_tmpfs ${TMPFS_DIR} ${TMPFS_SIZE}
+			[ -d "${BASEDIR}/work/Catalina" ] && rm -rf "${BASEDIR}/work/Catalina"
+			[ -d "${DATADIR}" ] || mkdir -p "${DATADIR}"
+			[ -f "${DATADIR}/system.properties" ] || cp -f "${BASEDIR}/etc/system.properties" "${DATADIR}/system.properties"
+			chown ${PKGUSER}:${PKGUSER} "${DATADIR}" "${DATADIR}/system.properties" "/var/run/${NAME}"
+			log_verbose "Starting ${NAME}..."
+			cd "${BASEDIR}" && exec ${JSVC} ${JSVC_OPTS} ${MAINCLASS} start
+		fi
+		;;
+	stop)
+		require_root
+        echo 0x10 > /proc/self/coredump_filter
+		rc=0
+		pid=$(is_service_running ${PIDFILE}) || rc=$?
+		if [ "0" = "${rc}" ]; then
+			# jsvc won't even try to do anything if pidfile is missing..
+			[ -e "${PIDFILE}" ] || echo "${pid}" > ${PIDFILE}
+			log_verbose "Stopping ${NAME}..."
+			cd "${BASEDIR}" && exec ${JSVC} ${JSVC_OPTS} -stop ${MAINCLASS} stop
+		else
+			log_verbose "${NAME} is not running"
+		fi
+		;;
+	status)
+		log_verbose "Checking status of ${NAME}..."
+		rc=0
+		pid=$(is_service_running ${PIDFILE}) || rc=$?
+		if [ "0" = "${rc}" ]; then
+			log_verbose "${NAME} is running, PID: ${pid}"
+		else
+			log_verbose "${NAME} is NOT running"
+		fi
+
+		exit ${rc}
+		;;
+	version)
+		cd ${BASEDIR} && ${JAVA} -jar ${MAINJAR} --version
+		;;
+esac
