@@ -8,9 +8,6 @@ ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-# Use baseimage-docker's init system
-CMD ["/sbin/my_init"]
-
 #Update APT-GET list
 RUN apt-get update 
 RUN apt-get install -y apt-utils
