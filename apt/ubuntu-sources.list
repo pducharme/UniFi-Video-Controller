@@ -22,5 +22,3 @@ deb-src http://archive.canonical.com/ubuntu trusty partner
 
 ###### Ubuntu Extras Repo
 deb http://extras.ubuntu.com/ubuntu trusty main
-
-
