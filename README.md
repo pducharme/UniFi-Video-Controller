@@ -1,6 +1,6 @@
 # unifi-video-controller
 
-This is a docker for use on Unraid 6.x for the UniFi-Video controller.
+This docker image runs the unifi-video controller on Ubuntu. Originally intended for Unraid 6.x, it should run fine anywhere.
 
 Set your local data, videos and logs directories in the `docker run` command. You can also specify a custom user and group for the daemon to run as.
 
@@ -19,7 +19,7 @@ docker run \
         -p 7447:7447 \
         -p 7080:7080 \
         -p 6666:6666 \
-	-v <data dir>:/var/lib/unifi-video \
+        -v <data dir>:/var/lib/unifi-video \
         -v <videos dir>:/usr/lib/unifi-video/data/videos \
         -v <logs dir>:/var/log/unifi-video \
         -e PUID=99 \
