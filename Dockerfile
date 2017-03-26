@@ -18,7 +18,9 @@ RUN apt-get upgrade -y -o Dpkg::Options::="--force-confold"
 RUN apt-get install -y apt-utils wget sudo moreutils patch
 
 # Installing Depedencies & UniFi Video
-RUN apt-get install -y mongodb-server openjdk-8-jre-headless jsvc
+RUN apt-get install -y mongodb-server
+RUN apt-get install -y openjdk-8-jre-headless
+RUN apt-get install -y jsvc
 RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.2/unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 RUN dpkg -i unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 
