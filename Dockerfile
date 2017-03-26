@@ -15,25 +15,31 @@ CMD ["/sbin/my_init"]
 RUN apt-get update 
 RUN apt-get install -y apt-utils
 RUN apt-get upgrade -y -o Dpkg::Options::="--force-confold"
-RUN apt-get install -y apt-utils wget sudo moreutils
+RUN apt-get install -y apt-utils wget sudo moreutils patch
 
 # Installing Depedencies & UniFi Video
 RUN apt-get install -y mongodb-server openjdk-8-jre-headless jsvc
 RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.2/unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 RUN dpkg -i unifi-video_3.6.2~Ubuntu16.04_amd64.deb
 
+# Patch unifi-video to remove ulimit and change hostname -option
+ADD unifi-video.patch /unifi-video.patch
+RUN patch -N /usr/sbin/unifi-video /unifi-video.patch
+
 VOLUME /var/lib/unifi-video
 VOLUME /var/log/unifi-video
 
 # Ports
-EXPOSE  7443 7445 7446 7447 7080 6666
+EXPOSE 7443
+EXPOSE 7445
+EXPOSE 7446
+EXPOSE 7447
+EXPOSE 7080
+EXPOSE 6666
 
 WORKDIR /usr/lib/unifi-video
 
-# Patched unifi-video script w/ ulimit removed
-ADD unifi-video /usr/sbin/unifi-video
-RUN chmod 755 /usr/sbin/unifi-video
-
+# This is run by init.sh, starts unifi-video and traps for graceful shutdown.
 ADD run.sh /run.sh
 RUN chmod 755 /run.sh
 
