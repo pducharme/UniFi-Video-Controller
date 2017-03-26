@@ -11,14 +11,10 @@ deb http://uk.archive.ubuntu.com/ubuntu/ trusty-security main restricted univers
 deb http://uk.archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe multiverse 
 deb http://uk.archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe multiverse 
 deb http://uk.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse 
-deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-security main restricted universe 
-multiverse 
-deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe 
-multiverse 
-deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe 
-multiverse 
-deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe 
-multiverse 
+deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-security main restricted universe multiverse 
+deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-updates main restricted universe multiverse 
+deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-proposed main restricted universe multiverse 
+deb-src http://uk.archive.ubuntu.com/ubuntu/ trusty-backports main restricted universe multiverse 
 
 ###### Ubuntu Partner Repo
 deb http://archive.canonical.com/ubuntu trusty partner
