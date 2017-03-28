@@ -18,8 +18,8 @@ RUN apt-get install -y apt-utils wget sudo moreutils patch
 RUN apt-get install -y mongodb-server
 RUN apt-get install -y openjdk-8-jre-headless
 RUN apt-get install -y jsvc
-RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.2/unifi-video_3.6.2~Ubuntu16.04_amd64.deb
-RUN dpkg -i unifi-video_3.6.2~Ubuntu16.04_amd64.deb
+RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.3/unifi-video_3.6.3~Ubuntu16.04_amd64.deb
+RUN dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb
 
 # Patch unifi-video to remove ulimit and change hostname -option
 ADD unifi-video.patch /unifi-video.patch
