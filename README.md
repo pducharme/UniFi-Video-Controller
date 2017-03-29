@@ -26,5 +26,6 @@ docker run \
         -e TZ=America/Los_Angeles \
         -e PUID=99 \
         -e PGID=100 \
+        -e DEBUG=1 \
         pducharme/unifi-video-controller
 ```
