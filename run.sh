@@ -15,18 +15,19 @@ function graceful_shutdown {
 # Trap SIGTERM for graceful exit
 trap graceful_shutdown SIGTERM
 
+# No debug mode set via env, default to off
 if [[ -z ${DEBUG} ]]; then
   DEBUG=0
 fi
 
-# Run the unifi-video daemon the unifi-video way
-echo -n "Starting unifi-video... "
-
+# Run with --debug if DEBUG=1
 if [[ ${DEBUG} -eq 1 ]]; then
   echo "[debug] Running unifi-video service with --debug."
   unifi_video_opts="--debug"
 fi
 
+# Run the unifi-video daemon the unifi-video way
+echo -n "Starting unifi-video... "
 /usr/sbin/unifi-video "${unifi_video_opts}" start
 echo "done."
 
