@@ -2,7 +2,8 @@
 set -e
 
 # Change user nobody's UID to custom or match unRAID.
-export PUID=$(echo "${PUID}" | sed -e 's/^[ \t]*//')
+export PUID
+PUID=$(echo "${PUID}" | sed -e 's/^[ \t]*//')
 if [[ ! -z "${PUID}" ]]; then
   echo "[info] PUID defined as '${PUID}'" | ts '%Y-%m-%d %H:%M:%.S'
 else
@@ -14,7 +15,8 @@ fi
 usermod -o -u "${PUID}" unifi-video &>/dev/null
 
 # Change group users to GID to custom or match unRAID.
-export PGID=$(echo "${PGID}" | sed -e 's/^[ \t]*//')
+export PGID
+PGID=$(echo "${PGID}" | sed -e 's/^[ \t]*//')
 if [[ ! -z "${PGID}" ]]; then
   echo "[info] PGID defined as '${PGID}'" | ts '%Y-%m-%d %H:%M:%.S'
 else
@@ -39,8 +41,8 @@ if [[ ! -f "/var/lib/unifi-video/perms.txt" ]]; then
   exit_code_chmod=$?
   set -e
 
-  if (( ${exit_code_chown} != 0 || ${exit_code_chmod} != 0 )); then
-    echo "[warn] Unable to chown/chmod ${volumes}, assuming SMB mountpoint"
+  if (( exit_code_chown != 0 || exit_code_chmod != 0 )); then
+    echo "[warn] Unable to chown/chmod ${volumes[*]}, assuming SMB mountpoint"
   fi
 
   echo "This file prevents permissions from being applied/re-applied to /config, if you want to reset permissions then please delete this file and restart the container." > /var/lib/unifi-video/perms.txt

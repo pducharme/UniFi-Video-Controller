@@ -24,5 +24,6 @@ docker run \
         -v <logs dir>:/var/log/unifi-video \
         -e PUID=99 \
         -e PGID=100 \
+        -e DEBUG=1 \
         pducharme/unifi-video-controller
 ```
