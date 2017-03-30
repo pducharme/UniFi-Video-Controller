@@ -28,8 +28,12 @@ fi
 
 # Run the unifi-video daemon the unifi-video way
 echo -n "Starting unifi-video... "
-/usr/sbin/unifi-video "${unifi_video_opts}" start
-echo "done."
+if /usr/sbin/unifi-video "${unifi_video_opts}" start; then
+  echo "done."
+else
+  echo "failed."
+  exit 1
+fi
 
 while true; do
   sleep 1
