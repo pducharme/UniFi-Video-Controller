@@ -29,3 +29,12 @@ docker run \
         -e DEBUG=1 \
         pducharme/unifi-video-controller
 ```
+
+## tmpfs mount error
+
+```
+mount: tmpfs is write-protected, mounting read-only
+mount: cannot mount tmpfs read-only
+```
+
+If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to your list of run options. This error has been seen on Ubuntu, but may occur on other platforms as well.
