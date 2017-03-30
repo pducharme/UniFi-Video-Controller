@@ -8,41 +8,27 @@ ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-#Update APT-GET list
-RUN apt-get update 
-RUN apt-get install -y apt-utils
-RUN apt-get upgrade -y -o Dpkg::Options::="--force-confold"
-RUN apt-get install -y apt-utils wget sudo moreutils patch
-
-# Installing Depedencies & UniFi Video
-RUN apt-get install -y mongodb-server
-RUN apt-get install -y openjdk-8-jre-headless
-RUN apt-get install -y jsvc
-RUN wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.3/unifi-video_3.6.3~Ubuntu16.04_amd64.deb
-RUN dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb
-
-# Patch unifi-video to remove ulimit and change hostname -option
+# Run all apt-get commands
 ADD unifi-video.patch /unifi-video.patch
-RUN patch -N /usr/sbin/unifi-video /unifi-video.patch
+RUN apt-get update && \
+  apt-get install -y apt-utils && \
+  apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
+  apt-get install -y wget sudo moreutils patch && \
+  apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
+  wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.3/unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
+  dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
+  patch -N /usr/sbin/unifi-video /unifi-video.patch
 
-VOLUME /var/lib/unifi-video
-VOLUME /var/log/unifi-video
+# Volumes
+VOLUME /var/lib/unifi-video /var/log/unifi-video
 
 # Ports
-EXPOSE 7443
-EXPOSE 7445
-EXPOSE 7446
-EXPOSE 7447
-EXPOSE 7080
-EXPOSE 6666
+EXPOSE 7443 7445 7446 7447 7080 6666
 
 WORKDIR /usr/lib/unifi-video
 
-# This is run by init.sh, starts unifi-video and traps for graceful shutdown.
-ADD run.sh /run.sh
-RUN chmod 755 /run.sh
-
-# Initialize user nobody and group users
+# The init script preps everything and the run script handles unifi-video daemon
 ADD init.sh /init.sh
-RUN chmod 755 /init.sh
+ADD run.sh /run.sh
+RUN chmod 755 /run.sh /init.sh
 CMD ["/init.sh"]
