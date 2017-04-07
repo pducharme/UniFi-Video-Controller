@@ -8,8 +8,12 @@ ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-# Run all apt-get commands
+# Add needed patches and scripts
 ADD unifi-video.patch /unifi-video.patch
+ADD init.sh /init.sh
+ADD run.sh /run.sh
+
+# Run all commands
 RUN apt-get update && \
   apt-get install -y apt-utils && \
   apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
@@ -17,7 +21,8 @@ RUN apt-get update && \
   apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
   wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.3/unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
   dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
-  patch -N /usr/sbin/unifi-video /unifi-video.patch
+  patch -N /usr/sbin/unifi-video /unifi-video.patch && \
+  chmod 755 /run.sh /init.sh
 
 # Volumes
 VOLUME /var/lib/unifi-video /var/log/unifi-video
@@ -25,10 +30,5 @@ VOLUME /var/lib/unifi-video /var/log/unifi-video
 # Ports
 EXPOSE 7443 7445 7446 7447 7080 6666
 
-WORKDIR /usr/lib/unifi-video
-
-# The init script preps everything and the run script handles unifi-video daemon
-ADD init.sh /init.sh
-ADD run.sh /run.sh
-RUN chmod 755 /run.sh /init.sh
+# Run this potato
 CMD ["/init.sh"]
