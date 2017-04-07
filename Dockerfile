@@ -10,7 +10,6 @@ ENV LANGUAGE en_US.UTF-8
 
 # Add needed patches and scripts
 ADD unifi-video.patch /unifi-video.patch
-ADD init.sh /init.sh
 ADD run.sh /run.sh
 
 # Run all commands
@@ -22,7 +21,7 @@ RUN apt-get update && \
   wget -q http://dl.ubnt.com/firmwares/unifi-video/3.6.3/unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
   dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
-  chmod 755 /run.sh /init.sh
+  chmod 755 /run.sh
 
 # Volumes
 VOLUME /var/lib/unifi-video /var/log/unifi-video
@@ -31,4 +30,4 @@ VOLUME /var/lib/unifi-video /var/log/unifi-video
 EXPOSE 7443 7445 7446 7447 7080 6666
 
 # Run this potato
-CMD ["/init.sh"]
+CMD ["/run.sh"]
