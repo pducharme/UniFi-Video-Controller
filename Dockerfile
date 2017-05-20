@@ -19,7 +19,7 @@ RUN apt-get update && \
   apt-get install -y wget sudo moreutils patch && \
   apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
   wget -q http://dl.ubnt.com/firmwares/unifi-video/3.7.0/unifi-video_3.7.0~Ubuntu16.04_amd64.deb && \
-  dpkg -i unifi-video_3.6.3~Ubuntu16.04_amd64.deb && \
+  dpkg -i unifi-video_3.7.0~Ubuntu16.04_amd64.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
   chmod 755 /run.sh
 
