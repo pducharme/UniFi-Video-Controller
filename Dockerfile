@@ -33,3 +33,4 @@ EXPOSE 7442 7443 7445 7446 7447 7080 6666
 
 # Run this potato
 CMD ["/run.sh"]
+
