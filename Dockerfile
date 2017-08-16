@@ -18,10 +18,10 @@ RUN apt-get update && \
   apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
   apt-get install -y wget sudo moreutils patch && \
   apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
-  wget -q http://dl.ubnt.com/firmwares/unifi-video/3.7.3/unifi-video_3.7.3-Ubuntu16.04_amd64.deb && \
-  dpkg -i unifi-video_3.7.3-Ubuntu16.04_amd64.deb && \
+  wget -q https://dl.ubnt.com/firmwares/ufv/v3.8.0-beta.2/unifi-video.Debian7_amd64.v3.8.0-beta.2.deb && \
+  dpkg -i unifi-video.Debian7_amd64.v3.8.0-beta.2.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
-  rm /unifi-video_3.7.3-Ubuntu16.04_amd64.deb && \
+  rm /unifi-video.Debian7_amd64.v3.8.0-beta.2.deb && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
 
@@ -29,7 +29,7 @@ RUN apt-get update && \
 VOLUME /var/lib/unifi-video /var/log/unifi-video
 
 # Ports
-EXPOSE 7443 7445 7446 7447 7080 6666
+EXPOSE 7442 7443 7445 7446 7447 7080 6666
 
 # Run this potato
 CMD ["/run.sh"]
