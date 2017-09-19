@@ -14,6 +14,7 @@ docker run \
         --name unifi-video \
         --cap-add SYS_ADMIN \
         --cap-add DAC_READ_SEARCH \
+        -p 7442:7442 \
         -p 7443:7443 \
         -p 7445:7445 \
         -p 7446:7446 \
