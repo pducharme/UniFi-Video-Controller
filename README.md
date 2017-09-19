@@ -1,4 +1,5 @@
-# **Important:** Unifi Video 3.8.0 *requires* a new port, 7442. Your cameras will not be able to connect to the controller until you add `-p 7442:7442` into your run command.
+# Important
+Unifi Video 3.8.0 requires a *new* port, 7442. Cameras that update their firmware will *not* be able to connect until `-p 7442:7442` is added to the run command.
 
 # unifi-video-controller
 
