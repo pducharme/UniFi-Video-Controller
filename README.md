@@ -1,3 +1,5 @@
+# **Important:** Unifi Video 3.8.0 *requires* a new port, 7442. Your cameras will not be able to connect to the controller until you add `-p 7442:7442` into your run command.
+
 # unifi-video-controller
 
 This docker image runs the unifi-video controller on Ubuntu. Originally intended for Unraid 6.x, it should run fine anywhere.
