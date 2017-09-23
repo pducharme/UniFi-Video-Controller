@@ -29,7 +29,7 @@ RUN apt-get update && \
 VOLUME /var/lib/unifi-video /var/log/unifi-video
 
 # Ports
-EXPOSE 7443 7445 7446 7447 7080 6666
+EXPOSE 7442 7443 7445 7446 7447 7080 6666
 
 # Run this potato
 CMD ["/run.sh"]
