@@ -1,0 +1,22 @@
+version: '3'
+services:
+  unifi-video-controller:
+    build: .
+    container_name: unifi-video-controller
+    ports:
+      - 7442:7442
+      - 7443:7443
+      - 7445:7445
+      - 7446:7446
+      - 7447:7447
+      - 7080:7080
+      - 6666:6666
+    volumes:
+      - ./run/data:/var/lib/unifi-video
+      - ./run/logs:/var/log/unifi-video
+    environment:
+      - TZ=America/Los_Angeles
+      - DEBUG=1
+    cap_add:
+      - SYS_ADMIN
+      - DAC_READ_SEARCH
