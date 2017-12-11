@@ -16,7 +16,7 @@ ADD run.sh /run.sh
 RUN apt-get update && \
   apt-get install -y apt-utils && \
   apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
-  apt-get install -y wget sudo moreutils patch && \
+  apt-get install -y wget sudo moreutils patch socat && \
   apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
   wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v3.8.5/unifi-video.Ubuntu16.04_amd64.v3.8.5.deb && \
   dpkg -i unifi-video.deb && \
