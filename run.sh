@@ -90,6 +90,10 @@ else
   exit 1
 fi
 
+# Run socat to proxy IPv6 address for 7445 and 7446
+setsid socat tcp6-listen:7445,fork,ipv6only=1 tcp4:127.0.0.1:7445
+setsid socat tcp6-listen:7446,fork,ipv6only=1 tcp4:127.0.0.1:7446
+
 while true; do
   sleep 1
 done
