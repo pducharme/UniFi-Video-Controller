@@ -42,3 +42,19 @@ mount: cannot mount tmpfs read-only
 ```
 
 If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to your list of run options. This error has been seen on Ubuntu, but may occur on other platforms as well.
+
+
+## custom ssl certificates
+
+To use custom SSL certs, you should put certs to `<data dir>/cert`
+
+They should be named:
+```
+cert.pem  # The Certificate
+privkey.pem # Private key for the cert
+```
+
+They will be imported into keystore and the original files will be removed.
+The old keystores are renamed to `*.bak` files.
+
+See also: https://community.ubnt.com/t5/UniFi-Video/Custom-SSL-Certificates-in-3-8-1-and-beyond/m-p/2089043/highlight/true#M88128

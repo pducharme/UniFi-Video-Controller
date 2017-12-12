@@ -68,6 +68,33 @@ else
   echo "[info] Permissions already set for volume mappings" | ts '%Y-%m-%d %H:%M:%.S'
 fi
 
+# Check new certificate and import it to keystore
+pushd /var/lib/unifi-video >/dev/null
+if [ -f "cert/cert.pem" -a -f "cert/privkey.pem" ]; then
+    # convert cert & key
+    mkdir certificates
+    openssl x509 -outform DER -in cert/cert.pem -out certificates/ufv-server.cert.der
+    openssl pkcs8 -topk8 -nocrypt -in cert/privkey.pem -out certificates/ufv-server.key.der
+    rm cert/cert.pem cert/privkey.pem
+
+    # insert / replace the config file
+    if grep -q '^[^#]*ufv\.custom\.certs\.enable' system.properties; then
+        sed '/^[^#]*ufv\.custom\.certs\.enable/cufv.custom.certs.enable = true' -i system.properties
+    else
+        echo 'ufv.custom.certs.enable = true' >> system.properties
+    fi
+
+    # remove old keys, controller will try to re-generate keys
+    for i in keystore cam-keystore ufv-truststore; do
+        mv $i $i.bak
+    done
+    cd /usr/lib/unifi-video/conf/evostream/
+    for i in server.crt server.key; do
+        mv $i $i.bak
+    done
+fi
+popd >/dev/null
+
 set +e
 
 # No debug mode set via env, default to off
