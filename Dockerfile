@@ -18,10 +18,10 @@ RUN apt-get update && \
   apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
   apt-get install -y wget sudo moreutils patch && \
   apt-get install -y mongodb-server openjdk-8-jre-headless jsvc && \
-  wget -q https://dl.ubnt.com/firmwares/ufv/v3.9.0-beta.6/unifi-video.Ubuntu16.04_amd64.v3.9.0-beta.6.deb && \
-  dpkg -i unifi-video.Ubuntu16.04_amd64.v3.9.0-beta.6.deb && \
+  wget -q https://dl.ubnt.com/firmwares/ufv/v3.9.2-beta.1/unifi-video.Ubuntu16.04_amd64.v3.9.2-beta.1.deb && \
+  dpkg -i unifi-video.Ubuntu16.04_amd64.v3.9.2-beta.1.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
-  rm /unifi-video.Ubuntu16.04_amd64.v3.9.0-beta.6.deb && \
+  rm /unifi-video.Ubuntu16.04_amd64.v3.9.2-beta.1.deb && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
 
