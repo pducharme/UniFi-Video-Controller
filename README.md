@@ -26,7 +26,6 @@ docker run \
         -p 6666:6666 \
         -v <data dir>:/var/lib/unifi-video \
         -v <videos dir>:/usr/lib/unifi-video/data/videos \
-        -v <logs dir>:/var/log/unifi-video \
         -e TZ=America/Los_Angeles \
         -e PUID=99 \
         -e PGID=100 \
