@@ -26,10 +26,18 @@ RUN apt-get update && \
   chmod 755 /run.sh
 
 # Volumes
-VOLUME /var/lib/unifi-video /var/log/unifi-video
+VOLUME ["/var/lib/unifi-video"]
+VOLUME ["/var/log/unifi-video"]
+VOLUME ["/usr/lib/unifi-video/data/videos"]
 
 # Ports
-EXPOSE 7442 7443 7445 7446 7447 7080 6666
+EXPOSE 7442
+EXPOSE 7443
+EXPOSE 7445
+EXPOSE 7446
+EXPOSE 7447
+EXPOSE 7080
+EXPOSE 6666
 
 # Run this potato
 CMD ["/run.sh"]
