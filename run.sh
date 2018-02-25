@@ -45,21 +45,30 @@ fi
 # Set group users to specified group id (non unique)
 groupmod -o -g "${PGID}" unifi-video &>/dev/null
 
+# Create logs directory
+mkdir -p /var/lib/unifi-video/logs
+
 # check for presence of perms file, if it exists then skip setting
 # permissions, otherwise recursively set on volume mappings for host
 if [[ ! -f "/var/lib/unifi-video/perms.txt" ]]; then
   echo "[info] Setting permissions recursively on volume mappings..." | ts '%Y-%m-%d %H:%M:%.S'
 
-  volumes=( "/var/lib/unifi-video" "/var/log/unifi-video" )
+  volumes=( "/var/lib/unifi-video" "/var/lib/unifi-video/videos" )
 
   set +e
+
   chown -R "${PUID}":"${PGID}" "${volumes[@]}"
   exit_code_chown=$?
-  chmod -R 775 "${volumes[@]}"
-  exit_code_chmod=$?
+
+  find "${volumes[@]}" -type d -exec chmod 775 '{}' ';'
+  exit_code_chmod_dirs=$?
+
+  find "${volumes[@]}" -type f -exec chmod 664 '{}' ';'
+  exit_code_chmod_files=$?
+
   set -e
 
-  if (( exit_code_chown != 0 || exit_code_chmod != 0 )); then
+  if (( exit_code_chown != 0 || exit_code_chmod_dirs != 0 || exit_code_chmod_files != 0)); then
     echo "[warn] Unable to chown/chmod ${volumes[*]}, assuming SMB mountpoint"
   fi
 
