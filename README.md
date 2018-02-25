@@ -24,6 +24,8 @@ docker run \
         -p 7447:7447 \
         -p 7080:7080 \
         -p 6666:6666 \
+        -p 1935:1935 \
+        -p 7447:7447 \
         -v <data dir>:/var/lib/unifi-video \
         -v <videos dir>:/usr/lib/unifi-video/data/videos \
         -v <logs dir>:/var/log/unifi-video \

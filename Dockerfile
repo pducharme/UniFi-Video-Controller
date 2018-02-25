@@ -55,5 +55,11 @@ EXPOSE 7446
 # RTSP via the controller
 EXPOSE 7447
 
+# RTMP via the controller
+EXPOSE 1935
+
+# RTMPS via the controller
+EXPOSE 7447
+
 # Run this potato
 CMD ["/run.sh"]
