@@ -1,7 +1,7 @@
 NAME=pducharme/unifi-video-controller
 VERSION=3.9.2
 
-.PHONY: all build tag_latest release
+.PHONY: help all build tag_latest release
 
 help:
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
