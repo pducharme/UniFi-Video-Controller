@@ -31,6 +31,9 @@ VOLUME ["/var/lib/unifi-video"]
 # Video storage, for seperation of data
 VOLUME ["/usr/lib/unifi-video/data/videos"]
 
+# RTMP via the controller
+EXPOSE 1935/tcp
+
 # Inbound Camera Streams (NVR Side)
 EXPOSE 6666/tcp
 
@@ -46,6 +49,9 @@ EXPOSE 7442/tcp
 # HTTPS Web UI & API
 EXPOSE 7443/tcp
 
+# RTMPS via the controller
+EXPOSE 7444/tcp
+
 # Video over HTTP
 EXPOSE 7445/tcp
 
@@ -53,12 +59,6 @@ EXPOSE 7445/tcp
 EXPOSE 7446/tcp
 
 # RTSP via the controller
-EXPOSE 7447/tcp
-
-# RTMP via the controller
-EXPOSE 1935/tcp
-
-# RTMPS via the controller
 EXPOSE 7447/tcp
 
 # Run this potato
