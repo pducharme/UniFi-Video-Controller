@@ -32,34 +32,34 @@ VOLUME ["/var/lib/unifi-video"]
 VOLUME ["/usr/lib/unifi-video/data/videos"]
 
 # Inbound Camera Streams (NVR Side)
-EXPOSE 6666
+EXPOSE 6666/tcp
 
 # UVC-Micro Talkback (Camera Side)
-EXPOSE 7004
+EXPOSE 7004/udp
 
 # HTTP Web UI & API
-EXPOSE 7080
+EXPOSE 7080/tcp
 
 # Camera Management (NVR Side)
-EXPOSE 7442
+EXPOSE 7442/tcp
 
 # HTTPS Web UI & API
-EXPOSE 7443
+EXPOSE 7443/tcp
 
 # Video over HTTP
-EXPOSE 7445
+EXPOSE 7445/tcp
 
 # Video over HTTPS
-EXPOSE 7446 
+EXPOSE 7446/tcp
 
 # RTSP via the controller
-EXPOSE 7447
+EXPOSE 7447/tcp
 
 # RTMP via the controller
-EXPOSE 1935
+EXPOSE 1935/tcp
 
 # RTMPS via the controller
-EXPOSE 7447
+EXPOSE 7447/tcp
 
 # Run this potato
 CMD ["/run.sh"]
