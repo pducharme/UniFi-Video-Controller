@@ -25,11 +25,35 @@ RUN apt-get update && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
 
-# Volumes
-VOLUME /var/lib/unifi-video /var/log/unifi-video
+# Base volume, will store db and configuration
+VOLUME ["/var/lib/unifi-video"]
 
-# Ports
-EXPOSE 7442 7443 7445 7446 7447 7080 6666
+# Video storage, for seperation of data
+VOLUME ["/usr/lib/unifi-video/data/videos"]
+
+# Inbound Camera Streams (NVR Side)
+EXPOSE 6666
+
+# UVC-Micro Talkback (Camera Side)
+EXPOSE 7004
+
+# HTTP Web UI & API
+EXPOSE 7080
+
+# Camera Management (NVR Side)
+EXPOSE 7442
+
+# HTTPS Web UI & API
+EXPOSE 7443
+
+# Video over HTTP
+EXPOSE 7445
+
+# Video over HTTPS
+EXPOSE 7446 
+
+# RTSP via the controller
+EXPOSE 7447
 
 # Run this potato
 CMD ["/run.sh"]
