@@ -53,7 +53,7 @@ mkdir -p /var/lib/unifi-video/logs
 if [[ ! -f "/var/lib/unifi-video/perms.txt" ]]; then
   echo "[info] Setting permissions recursively on volume mappings..." | ts '%Y-%m-%d %H:%M:%.S'
 
-  volumes=( "/var/lib/unifi-video" "/var/lib/unifi-video/data/videos" )
+  volumes=( "/var/lib/unifi-video" )
 
   set +e
 
