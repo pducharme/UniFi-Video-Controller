@@ -29,7 +29,7 @@ RUN apt-get update && \
 VOLUME ["/var/lib/unifi-video"]
 
 # Video storage, for seperation of data
-VOLUME ["/usr/lib/unifi-video/data/videos"]
+VOLUME ["/var/lib/unifi-video/videos"]
 
 # RTMP via the controller
 EXPOSE 1935/tcp
