@@ -13,6 +13,7 @@ Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to 
 
 ## Run it
 ```
+
 docker run \
         --name unifi-video \
         --cap-add SYS_ADMIN \
@@ -43,3 +44,19 @@ mount: cannot mount tmpfs read-only
 ```
 
 If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to your list of run options. This error has been seen on Ubuntu, but may occur on other platforms as well.
+
+## Changelog
+
+### 2018.02.27
+* Use MongoDB 3.4 repo from MongoDB.
+* Update `beta` github branch to `master`.
+* Add `release` branch to github and switch Docker Hub's `latest` tag to `release` branch.
+* Setup tagging in Docker Hub and created tag for 3.9.0.
+* Switch videos volume location from `/usr/lib/unifi-video/data/videos` to `/var/lib/unifi-video/videos`.
+* Use Docker's `ENTRYPOINT` instead of `CMD`.
+
+### 2018.02.26
+* Update Unifi Video to 3.9.2
+* Add `tzdata` package.
+* Remove logs volume.
+* Improve permissions fixing in `run.sh`.
