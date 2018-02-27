@@ -87,7 +87,7 @@ fi
 # Run with --debug if DEBUG=1
 if [[ ${DEBUG} -eq 1 ]]; then
   echo "[debug] Running unifi-video service with --debug."
-  unifi_video_opts="--debug"
+  unifi_video_opts="--verbose --debug"
 fi
 
 # Run the unifi-video daemon the unifi-video way
