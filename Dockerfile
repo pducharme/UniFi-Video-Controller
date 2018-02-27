@@ -62,4 +62,4 @@ EXPOSE 7446/tcp
 EXPOSE 7447/tcp
 
 # Run this potato
-CMD ["/run.sh"]
+ENTRYPOINT ["/run.sh"]
