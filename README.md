@@ -51,7 +51,7 @@ If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to
 * Use MongoDB 3.4 repo from MongoDB.
 * Update `beta` github branch to `master`.
 * Add `release` branch to github and switch Docker Hub's `latest` tag to `release` branch.
-* Setup tagging in Docker Hub and created tag for 3.9.0.
+* Setup tagging in Docker Hub and created tag for 3.9.0 and 3.9.2.
 * Switch videos volume location from `/usr/lib/unifi-video/data/videos` to `/var/lib/unifi-video/videos`.
 * Use Docker's `ENTRYPOINT` instead of `CMD`.
 
