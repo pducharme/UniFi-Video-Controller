@@ -47,7 +47,7 @@ If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to
 
 ## Changelog
 
-### 2018.02.27
+### 3.9.2-2
 * Use MongoDB 3.4 repo from MongoDB.
 * Update `beta` github branch to `master`.
 * Add `release` branch to github and switch Docker Hub's `latest` tag to `release` branch.
@@ -55,8 +55,8 @@ If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to
 * Switch videos volume location from `/usr/lib/unifi-video/data/videos` to `/var/lib/unifi-video/videos`.
 * Use Docker's `ENTRYPOINT` instead of `CMD`.
 
-### 2018.02.26
+### 3.9.2-1
 * Update Unifi Video to 3.9.2
-* Add `tzdata` package.
+* Add `tzdata` package to fix issue #56 w/ 3.9.2
 * Remove logs volume.
 * Improve permissions fixing in `run.sh`.
