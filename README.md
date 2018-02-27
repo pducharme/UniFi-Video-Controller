@@ -12,8 +12,8 @@ The first run should create the file `system.properties` in your data directory.
 Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to start the Unifi Video wizard.
 
 ## Run it
-```
 
+```
 docker run \
         --name unifi-video \
         --cap-add SYS_ADMIN \
