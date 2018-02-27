@@ -13,6 +13,8 @@ Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to 
 
 ## Run it
 
+This example `docker run` command needs some values filled in, but is otherwise ready to use.
+
 ```
 docker run \
         --name unifi-video \
