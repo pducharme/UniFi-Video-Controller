@@ -11,7 +11,7 @@ The first run should create the file `system.properties` in your data directory.
 
 Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to start the Unifi Video wizard.
 
-## Run it
+## Run it
 
 This example `docker run` command needs some values filled in, but is otherwise ready to use.
 
