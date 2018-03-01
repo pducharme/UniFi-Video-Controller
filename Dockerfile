@@ -1,6 +1,9 @@
 FROM phusion/baseimage:latest
 MAINTAINER pducharme@me.com
 
+# Version
+ENV version 3.9.2
+
 # Set correct environment variables
 ENV HOME /root
 ENV DEBIAN_FRONTEND noninteractive
@@ -25,48 +28,33 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14
   apt-get update && apt-get install -y mongodb-org-server
 
 # Get, install and patch unifi-video
-RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v3.9.2/unifi-video.Ubuntu16.04_amd64.v3.9.2.deb && \
+RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/unifi-video.Ubuntu16.04_amd64.v${version}.deb && \
   dpkg -i unifi-video.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
   rm /unifi-video.deb && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
 
-# Base volume, will store db and configuration
+# Configuration and database volume
 VOLUME ["/var/lib/unifi-video"]
 
-# Video storage, for seperation of data
+# Video storage volume
 VOLUME ["/var/lib/unifi-video/videos"]
 
-# RTMP via the controller
-EXPOSE 1935/tcp
+# RTMP, RTMPS & RTSP via the controller
+EXPOSE 1935/tcp 7444/tcp 7447/tcp
 
-# Inbound Camera Streams (NVR Side)
-EXPOSE 6666/tcp
+# Inbound Camera Streams & Camera Management (NVR Side)
+EXPOSE 6666/tcp 7442/tcp
 
 # UVC-Micro Talkback (Camera Side)
 EXPOSE 7004/udp
 
-# HTTP Web UI & API
-EXPOSE 7080/tcp
+# HTTP & HTTPS Web UI + API
+EXPOSE 7080/tcp 7443/tcp
 
-# Camera Management (NVR Side)
-EXPOSE 7442/tcp
-
-# HTTPS Web UI & API
-EXPOSE 7443/tcp
-
-# RTMPS via the controller
-EXPOSE 7444/tcp
-
-# Video over HTTP
-EXPOSE 7445/tcp
-
-# Video over HTTPS
-EXPOSE 7446/tcp
-
-# RTSP via the controller
-EXPOSE 7447/tcp
+# Video over HTTP & HTTPS
+EXPOSE 7445/tcp 7446/tcp
 
 # Run this potato
 ENTRYPOINT ["/run.sh"]
