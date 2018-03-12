@@ -1,17 +1,17 @@
 # Important
-Unifi Video 3.8.0 and + requires a *new* port, 7442. Cameras that update their firmware will *not* be able to connect until `-p 7442:7442` is added to the run command.
+Starting with Unifi Video 3.8.0, port 7442 is required for secure communication between the nvr and camera. Cameras that update their firmware will *not* be able to connect until `-p 7442:7442` is added to the run command.
+
+Starting with Unifi Video 3.9.2, cameras will update their firmware to 4.2.13 which is incompatible with earlier releases. If your cameras upgrade and you want to use an earlier version, you'll have to manually downgrade.
 
 # unifi-video-controller
 
 This docker image runs the unifi-video controller on Ubuntu. Originally intended for Unraid 6.x, it should run fine anywhere.
 
-Set your local data, videos and logs directories in the `docker run` command. You can also specify a custom user and group for the daemon to run as.
-
-The first run should create the file `system.properties` in your data directory. If it doesn't, create it yourself. *You* must add `is_default=true` as the first line in order to force the wizard to run.
+Set your local data and videos directories in the `docker run` command. You can also specify a UID and GID for the daemon to run as.
 
 Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to start the Unifi Video wizard.
 
-## Run it
+# Run it
 ```
 docker run \
         --name unifi-video \
@@ -35,7 +35,11 @@ docker run \
         pducharme/unifi-video-controller
 ```
 
-## tmpfs mount error
+# Changing versions
+
+Starting with 3.9.0, releases are tagged. Using `pducharme/unifi-video-controller` or `pducharme/unifi-video-controller:latest` will get you the latest version. You can get a different version by using a specific tag, like `:3.9.0`, `:3.9.2` or `3.9.3`. If you update and have issues, you can quickly switch back to the previously working version.
+
+#  tmpfs mount error
 
 ```
 mount: tmpfs is write-protected, mounting read-only
