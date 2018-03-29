@@ -23,8 +23,7 @@ services:
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
-# Uncomment for tmpfs read-only error:
-# mount: tmpfs is write-protected, mounting read-only
-# mount: cannot mount tmpfs read-only
+# Uncomment security option below to set apparmor unconfined if "tmpfs is write-protected, mounting read-only" error is seen.
+# Known to happen on ubuntu, synology, and other platforms.
 #    security_opt:
 #      - apparmor:unconfined
