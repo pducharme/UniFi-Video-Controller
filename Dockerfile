@@ -2,7 +2,7 @@ FROM phusion/baseimage:0.10.0
 MAINTAINER pducharme@me.com
 
 # Version
-ENV version 3.9.7-beta.1
+ENV version 3.9.7
 
 # Set correct environment variables
 ENV HOME /root
