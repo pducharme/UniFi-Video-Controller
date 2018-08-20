@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.10.0
+FROM phusion/baseimage:0.11
 MAINTAINER pducharme@me.com
 # Version
 ENV version 3.9.8-beta.3
