@@ -36,6 +36,11 @@ docker run \
         pducharme/unifi-video-controller
 ```
 
+# Extra instructions for Docker for Windows
+To avoid MongoDB errors that cause UniFi Video to hang at the "upgrading" screen on startup, you must create a volume (e.g. UnifiVideoDataVolume) `docker volume create UnifiVideoDataVolume` and then use that volume for /var/lib/unifi-video by changing this line:  `-v UnifiVideoDataVolume:/var/lib/unifi-video`
+
+You can then specify a different directory for your actual video files, which do not need to be located in a docker volume. E.g. `-v D:\Recordings:/var/lib/unifi-video/videos`
+
 # Changing versions
 
 Starting with 3.9.0, releases are tagged. Using `pducharme/unifi-video-controller` or `pducharme/unifi-video-controller:latest` will get you the latest version. You can get a different version by using a specific tag, like `:3.9.0`, `:3.9.2` or `3.9.3`. If you update and have issues, you can quickly switch back to the previously working version.
