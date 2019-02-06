@@ -2,7 +2,7 @@ FROM phusion/baseimage:0.11
 MAINTAINER pducharme@me.com
 
 # Version
-ENV version 3.9.12
+ENV version 3.10.1
 
 # Set correct environment variables
 ENV HOME /root
@@ -28,7 +28,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14
   apt-get update && apt-get install -y mongodb-org-server
 
 # Get, install and patch unifi-video
-RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/unifi-video.Ubuntu16.04_amd64.v${version}.deb && \
+RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/unifi-video/v${version}/unifi-video.Ubuntu18.04_amd64.v${version}.deb && \
   dpkg -i unifi-video.deb && \
   patch -N /usr/sbin/unifi-video /unifi-video.patch && \
   rm /unifi-video.deb && \
