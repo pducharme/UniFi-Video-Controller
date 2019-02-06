@@ -1,7 +1,5 @@
 # Important
-Starting with Unifi Video 3.8.0, port 7442 is required for secure communication between the nvr and camera. Cameras that update their firmware will *not* be able to connect until `-p 7442:7442` is added to the run command.
-
-Starting with Unifi Video 3.9.2, cameras will update their firmware to 4.2.13 which is incompatible with earlier releases. If your cameras upgrade and you want to use an earlier version, you'll have to manually downgrade.
+Starting with Unifi Video 3.10.x, in-place upgrades are not fully supported. It's best to generate and save a backup file, and remove your data folder. Then restore the backup from the web setup page.
 
 # unifi-video-controller
 
@@ -40,10 +38,6 @@ docker run \
 To avoid MongoDB errors that cause UniFi Video to hang at the "upgrading" screen on startup, you must create a volume (e.g. UnifiVideoDataVolume) `docker volume create UnifiVideoDataVolume` and then use that volume for /var/lib/unifi-video by changing this line:  `-v UnifiVideoDataVolume:/var/lib/unifi-video`
 
 You can then specify a different directory for your actual video files, which do not need to be located in a docker volume. E.g. `-v D:\Recordings:/var/lib/unifi-video/videos`
-
-# Changing versions
-
-Starting with 3.9.0, releases are tagged. Using `pducharme/unifi-video-controller` or `pducharme/unifi-video-controller:latest` will get you the latest version. You can get a different version by using a specific tag, like `:3.9.0`, `:3.9.2` or `3.9.3`. If you update and have issues, you can quickly switch back to the previously working version.
 
 #  tmpfs mount error
 
