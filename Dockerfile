@@ -15,17 +15,23 @@ ENV LANGUAGE en_US.UTF-8
 ADD unifi-video.patch /unifi-video.patch
 ADD run.sh /run.sh
 
-# Run all commands
-RUN apt-get update && \
-  apt-get install -y apt-utils && \
-  apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
-  apt-get install -y wget sudo moreutils patch tzdata && \
-  apt-get install -y openjdk-8-jre-headless jsvc
-
-# Add mongodb 3.4 repo and install
+# Add mongodb repo, key, update and install needed packages
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6 && \
   echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.4.list && \
-  apt-get update && apt-get install -y mongodb-org-server
+  apt-get update && \
+  apt-get install -y apt-utils && \
+  apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
+  apt-get install -y  \
+    jsvc \
+    jq \
+    moreutils \
+    openjdk-8-jre-headless \
+    patch \
+    sudo \
+    tzdata \
+    mongodb-org-server \
+    mongodb-org-shell \
+    wget
 
 # Get, install and patch unifi-video
 RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/unifi-video.Ubuntu16.04_amd64.v${version}.deb && \
