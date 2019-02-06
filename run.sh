@@ -22,7 +22,7 @@ trap graceful_shutdown SIGTERM
 # Change user nobody's UID to custom or match unRAID.
 export PUID
 PUID=$(echo "${PUID}" | sed -e 's/^[ \t]*//')
-if [[ ! -z "${PUID}" ]]; then
+if [[ -n "${PUID}" ]]; then
   echo "[info] PUID defined as '${PUID}'" | ts '%Y-%m-%d %H:%M:%.S'
 else
   echo "[warn] PUID not defined (via -e PUID), defaulting to '99'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -35,7 +35,7 @@ usermod -o -u "${PUID}" unifi-video &>/dev/null
 # Change group users to GID to custom or match unRAID.
 export PGID
 PGID=$(echo "${PGID}" | sed -e 's/^[ \t]*//')
-if [[ ! -z "${PGID}" ]]; then
+if [[ -n "${PGID}" ]]; then
   echo "[info] PGID defined as '${PGID}'" | ts '%Y-%m-%d %H:%M:%.S'
 else
   echo "[warn] PGID not defined (via -e PGID), defaulting to '100'" | ts '%Y-%m-%d %H:%M:%.S'
@@ -99,6 +99,54 @@ else
   exit 1
 fi
 
+# Wait for mongodb to come online.
+echo -n "Waiting for mongodb to come online..."
+while ! mongo --quiet localhost:7441 --eval "{ ping: 1}" > /dev/null 2>&1; do
+  sleep 2
+  echo -n "."
+done
+echo " done."
+
+# Get the current featureCompatibilityVersion
+MONGO_FEATURE_COMPATIBILITY_VERSION=$( mongo --quiet --eval "db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )" localhost:7441 | jq -r .featureCompatibilityVersion )
+
+# Update db to 3.4 features
+if mongo --version | grep -q "v3.4"; then
+  if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "3.4" ]]; then
+    echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 3.4..."
+    if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "3.4" } )' localhost:7441 > /dev/null 2>&1; then
+      echo " done."
+    else
+      echo " failed."
+    fi
+  fi
+fi
+
+# Update db to 3.6 features
+if mongo --version | grep -q "v3.6"; then
+  if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "3.6" ]]; then
+    echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 3.6..."
+    if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "3.6" } )' localhost:7441 > /dev/null 2>&1; then
+      echo " done."
+    else
+      echo " failed."
+    fi
+  fi
+fi
+
+# Update db to 4.0 features
+if mongo --version | grep -q "v4.0"; then
+  if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "4.0" ]]; then
+    echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 4.0..."
+    if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "4.0" } )' localhost:7441 > /dev/null 2>&1; then
+      echo " done."
+    else
+      echo " failed."
+    fi
+  fi
+fi
+
+# Loop while we wait for shutdown trap
 while true; do
-  sleep 1
+  sleep 2
 done
