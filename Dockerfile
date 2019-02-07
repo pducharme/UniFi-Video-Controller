@@ -15,17 +15,24 @@ ENV LANGUAGE en_US.UTF-8
 ADD unifi-video.patch /unifi-video.patch
 ADD run.sh /run.sh
 
-# Run all commands
-RUN apt-get update && \
+# Add mongodb repo, key, update and install needed packages
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4 && \
+  echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse" > /etc/apt/sources.list.d/mongodb-org-4.0.list && \
+  apt-get update && \
   apt-get install -y apt-utils && \
   apt-get upgrade -y -o Dpkg::Options::="--force-confold" && \
-  apt-get install -y wget sudo moreutils patch tzdata && \
-  apt-get install -y openjdk-8-jre-headless jsvc
-
-# Add mongodb 3.6 repo and install
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5 && \
-  echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.6 multiverse" > /etc/apt/sources.list.d/mongodb-org-3.6.list && \
-    apt-get update && apt-get install -y mongodb-org-server
+  apt-get install -y  \
+    jsvc \
+    jq \
+    moreutils \
+    openjdk-8-jre-headless \
+    patch \
+    sudo \
+    tzdata \
+    mongodb-org-server \
+    mongodb-org-shell \
+    moreutils \
+    wget
 
 # Get, install and patch unifi-video
 RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/unifi-video/v${version}/unifi-video.Ubuntu18.04_amd64.v${version}.deb && \
@@ -57,4 +64,4 @@ EXPOSE 7080/tcp 7443/tcp
 EXPOSE 7445/tcp 7446/tcp
 
 # Run this potato
-ENTRYPOINT ["/run.sh"]
+CMD ["/run.sh"]
