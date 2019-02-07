@@ -31,6 +31,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
     tzdata \
     mongodb-org-server \
     mongodb-org-shell \
+    moreutils \
     wget
 
 # Get, install and patch unifi-video
