@@ -1,6 +1,13 @@
 # Important
 Starting with Unifi Video 3.10.x, in-place upgrades are not fully supported. It's best to generate and save a backup file, and remove your data folder. Then restore the backup from the web setup page.
 
+Step 1: Backup and move your `data` folder somewhere (we need it later).  
+Step 2: Create a new empty `data` folder.  
+Step 3: Pull the latest image and start the container with the new empty `data` folder and your normal `videos` folder.  
+Step 4: Wait, the container sets some permissions on all your videos. This can take a while.  
+Step 5: Visit for example http://localhost:7080 - Click `Restore Backup` -> Navigate to your backuped `data` folder. From there go to `backup` and grab the latest zip file.  
+Step 6: Restore all your videos under -> `Settings` -> `System Configuration` -> `Tools` -> Check `Restore recordings` -> Click `Analyze`
+
 # unifi-video-controller
 
 This docker image runs the unifi-video controller on Ubuntu. Originally intended for Unraid 6.x, it should run fine anywhere.
