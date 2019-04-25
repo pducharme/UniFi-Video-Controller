@@ -111,7 +111,7 @@ echo " done."
 MONGO_FEATURE_COMPATIBILITY_VERSION=$( mongo --quiet --eval "db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )" localhost:7441 | jq -r .featureCompatibilityVersion )
 
 # Update db to 3.4 features
-if mongo --version | grep -q "v3.4"; then
+if mongo --version 2>&1 | grep -q "v3.4"; then
   if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "3.4" ]]; then
     echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 3.4..."
     if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "3.4" } )' localhost:7441 > /dev/null 2>&1; then
@@ -123,7 +123,7 @@ if mongo --version | grep -q "v3.4"; then
 fi
 
 # Update db to 3.6 features
-if mongo --version | grep -q "v3.6"; then
+if mongo --version 2>&1 | grep -q "v3.6"; then
   if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "3.6" ]]; then
     echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 3.6..."
     if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "3.6" } )' localhost:7441 > /dev/null 2>&1; then
@@ -135,7 +135,7 @@ if mongo --version | grep -q "v3.6"; then
 fi
 
 # Update db to 4.0 features
-if mongo --version | grep -q "v4.0"; then
+if mongo --version 2>&1 | grep -q "v4.0"; then
   if [[ "${MONGO_FEATURE_COMPATIBILITY_VERSION}" != "4.0" ]]; then
     echo -n "Found FeatureCompatibilityVersion ${MONGO_FEATURE_COMPATIBILITY_VERSION}, setting to 4.0..."
     if mongo --quiet --eval 'db.adminCommand( { setFeatureCompatibilityVersion: "4.0" } )' localhost:7441 > /dev/null 2>&1; then
