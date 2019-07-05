@@ -13,6 +13,7 @@ Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to 
 ```
 docker run \
         --name unifi-video \
+        --hostname nvr.example.com \
         --cap-add SYS_ADMIN \
         --cap-add DAC_READ_SEARCH \
         -p 10001:10001 \
