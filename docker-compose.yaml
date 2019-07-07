@@ -20,6 +20,7 @@ services:
     environment:
       - TZ=America/Los_Angeles
       - DEBUG=1
+      - VERSION=3.10.6
     cap_add:
       - SYS_ADMIN
       - DAC_READ_SEARCH
