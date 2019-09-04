@@ -1,6 +1,10 @@
 # Important
 Starting with Unifi Video 3.10.x, in-place upgrades are not fully supported. It's best to generate and save a backup file, and remove your data folder. Then restore the backup from the web setup page.
 
+Starting with Unifi Video 3.8.0, port 7442 is required for secure communication between the nvr and camera. Cameras that update their firmware will *not* be able to connect until `-p 7442:7442` is added to the run command.
+
+Starting with Unifi Video 3.9.2, cameras will update their firmware to 4.2.13 which is incompatible with earlier releases. If your cameras upgrade and you want to use an earlier version, you'll have to manually downgrade.
+
 # unifi-video-controller
 
 This docker image runs the unifi-video controller on Ubuntu. Originally intended for Unraid 6.x, it should run fine anywhere.
