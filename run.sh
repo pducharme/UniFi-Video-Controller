@@ -108,7 +108,7 @@ done
 echo " done."
 
 # Get the current featureCompatibilityVersion
-MONGO_FEATURE_COMPATIBILITY_VERSION=$( mongo --quiet --eval "db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )" localhost:7441 | jq -r .featureCompatibilityVersion )
+MONGO_FEATURE_COMPATIBILITY_VERSION=$( mongo --quiet --eval "db.adminCommand( { getParameter: 1, featureCompatibilityVersion: 1 } )" localhost:7441 | jq -r .featureCompatibilityVersion.version )
 
 # Update db to 3.4 features
 if mongo --version 2>&1 | grep -q "v3.4"; then
