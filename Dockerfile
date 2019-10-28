@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
+ENV PUID="99" PGID="100" UMASK="002"
 
 # Add needed patches and scripts
 ADD unifi-video.patch /unifi-video.patch
