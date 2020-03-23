@@ -38,7 +38,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
 # Get, install and patch unifi-video
 RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/unifi-video.Ubuntu18.04_amd64.v${version}.deb && \
   dpkg -i unifi-video.deb && \
-  patch -N /usr/sbin/unifi-video /unifi-video.patch && \
+  patch -lN /usr/sbin/unifi-video /unifi-video.patch && \
   rm /unifi-video.deb && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
