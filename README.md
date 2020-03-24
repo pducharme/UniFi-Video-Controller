@@ -13,7 +13,6 @@ Restart the docker, visit http://localhost:7080 or http://<ip.address>:7080/ to 
 ```
 docker run \
         --name unifi-video \
-        --cap-add SYS_ADMIN \
         --cap-add DAC_READ_SEARCH \
         -p 10001:10001 \
         -p 1935:1935 \
@@ -27,9 +26,11 @@ docker run \
         -p 7447:7447 \
         -v <data dir>:/var/lib/unifi-video \
         -v <videos dir>:/var/lib/unifi-video/videos \
+        --tmpfs /var/cache/unifi-video \
         -e TZ=America/Los_Angeles \
         -e PUID=99 \
         -e PGID=100 \
+        -e CREATE_TMPFS=no \
         -e DEBUG=1 \
         pducharme/unifi-video-controller
 ```
@@ -39,11 +40,3 @@ To avoid MongoDB errors that cause UniFi Video to hang at the "upgrading" screen
 
 You can then specify a different directory for your actual video files, which do not need to be located in a docker volume. E.g. `-v D:\Recordings:/var/lib/unifi-video/videos`
 
-#  tmpfs mount error
-
-```
-mount: tmpfs is write-protected, mounting read-only
-mount: cannot mount tmpfs read-only
-```
-
-If you get this tmpfs mount error, add `--security-opt apparmor:unconfined \` to your list of run options. This error has been seen on Ubuntu, but may occur on other platforms as well.
