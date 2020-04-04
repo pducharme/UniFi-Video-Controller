@@ -2,7 +2,7 @@ FROM phusion/baseimage:0.11
 MAINTAINER pducharme@me.com
 
 # Version
-ENV version 3.10.10
+ENV version 3.10.11
 
 # Set correct environment variables
 ENV HOME /root
@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
+ENV PUID="99" PGID="100" UMASK="002"
 
 # Add needed patches and scripts
 ADD unifi-video.patch /unifi-video.patch
@@ -37,7 +38,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
 # Get, install and patch unifi-video
 RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/unifi-video.Ubuntu18.04_amd64.v${version}.deb && \
   dpkg -i unifi-video.deb && \
-  patch -N /usr/sbin/unifi-video /unifi-video.patch && \
+  patch -lN /usr/sbin/unifi-video /unifi-video.patch && \
   rm /unifi-video.deb && \
   rm /unifi-video.patch && \
   chmod 755 /run.sh
