@@ -44,19 +44,11 @@ RUN wget -q -O unifi-video.deb https://dl.ubnt.com/firmwares/ufv/v${version}/uni
   chmod 755 /run.sh
 
 # RTMP, RTMPS & RTSP via the controller
-EXPOSE 1935/tcp 7444/tcp 7447/tcp
-
 # Inbound Camera Streams & Camera Management (NVR Side)
-EXPOSE 6666/tcp 7442/tcp
-
 # UVC-Micro Talkback (Camera Side)
-EXPOSE 7004/udp
-
 # HTTP & HTTPS Web UI + API
-EXPOSE 7080/tcp 7443/tcp
-
 # Video over HTTP & HTTPS
-EXPOSE 7445/tcp 7446/tcp
+EXPOSE 1935/tcp 7444/tcp 7447/tcp 6666/tcp 7442/tcp 7004/udp 7080/tcp 7443/tcp 7445/tcp 7446/tcp
 
 # Run this potato
 CMD ["/run.sh"]
