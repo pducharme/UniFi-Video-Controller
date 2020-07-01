@@ -142,5 +142,18 @@ fi
 
 # Loop while we wait for shutdown trap
 while true; do
-  sleep 2
+  # When --tmpfs is used, container restarts cause these folders to go missing.
+  # See issue #178 for details.
+  if [[ ! -d /var/cache/unifi-video/exports ]]; then
+    echo -n "Re-creating /var/cache/unifi-video/exports... "
+    mkdir -p /var/cache/unifi-video/exports
+    echo "done."
+  fi
+
+  if [[ ! -d /var/cache/unifi-video/hls ]]; then
+    echo -n "Re-creating /var/cache/unifi-video/hls... "
+    mkdir -p /var/cache/unifi-video/hls
+    echo "done."
+  fi
+  sleep 5
 done
