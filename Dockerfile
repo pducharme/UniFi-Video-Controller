@@ -26,7 +26,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75
     jsvc \
     jq \
     moreutils \
-    openjdk-8-jre-headless \
+    openjdk-8-jre-headless=8u162-b12-1 \
     patch \
     sudo \
     tzdata \
