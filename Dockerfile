@@ -50,7 +50,7 @@ RUN wget -q -O apache-log4j-2.15.0-bin.tar.gz https://dlcdn.apache.org/logging/l
   install --backup -m 400 -o 1003 -g 104 -T apache-log4j-2.15.0-bin/log4j-api-2.15.0.jar /usr/lib/unifi-video/lib/log4j-api-2.1.jar && \
   install --backup -m 400 -o 1003 -g 104 -T apache-log4j-2.15.0-bin/log4j-core-2.15.0.jar /usr/lib/unifi-video/lib/log4j-core-2.1.jar && \
   install --backup -m 400 -o 1003 -g 104 -T apache-log4j-2.15.0-bin/log4j-slf4j-impl-2.15.0.jar /usr/lib/unifi-video/lib/log4j-slf4j-impl-2.1.jar && \
-   rm -fr /apache-log4j-2.15.0-bin.tar.gz /apache-log4j-2.15.0-bin
+  rm -fr /apache-log4j-2.15.0-bin.tar.gz /apache-log4j-2.15.0-bin
 
 # RTMP, RTMPS & RTSP, Inbound Camera Streams & Camera Management (NVR Side), UVC-Micro Talkback (Camera Side)
 # HTTP & HTTPS Web UI + API, Video over HTTP & HTTPS
