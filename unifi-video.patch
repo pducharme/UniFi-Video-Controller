@@ -1,14 +1,23 @@
---- unifi-video.orig   2020-03-23 03:29:04.794581615 +0000
-+++ unifi-video        2020-03-23 03:39:22.856719123 +0000
+--- unifi-video.orig	2021-12-11 13:53:42.590757554 -0500
++++ unifi-video	2021-12-11 13:55:44.303079559 -0500
 @@ -17,6 +17,7 @@
  MAINJAR="${BASEDIR}/lib/airvision.jar"
-
+ 
  ENABLE_TMPFS=yes
 +CREATE_TMPFS=${CREATE_TMPFS:-yes}
  TMPFS_SIZE=15%
-
+ 
  UFV_VERBOSE=
-@@ -276,7 +277,7 @@
+@@ -252,6 +253,8 @@
+ [ -e /dev/urandom ] && \
+         JVM_EXTRA_OPTS="-Djava.security.egd=file:/dev/./urandom ${JVM_EXTRA_OPTS}"
+ 
++JVM_EXTRA_OPTS="-Dlog4j2.formatMsgNoLookups=true ${JVM_EXTRA_OPTS}"
++
+ JVM_OPTS="${JVM_EXTRA_OPTS} \
+  -Xmx${JVM_MX} \
+  -Xss${JVM_STACKSIZE_MX} \
+@@ -276,7 +279,7 @@
  		 -Dcom.sun.management.jmxremote.authenticate=false \
  		 -Dcom.sun.management.jmxremote.port=${JVM_JMXREMOTE_PORT}"
  	[ -z "${JVM_JMXREMOTE_HOST}" ] && \
@@ -17,7 +26,7 @@
  	[ -z "${JVM_JMXREMOTE_HOST}" ] || \
  		JVM_OPTS="${JVM_OPTS} -Djava.rmi.server.hostname=${JVM_JMXREMOTE_HOST}"
  
-@@ -336,13 +337,12 @@
+@@ -336,13 +339,12 @@
  	start)
  	require_root
      update_limits
@@ -25,18 +34,18 @@
          echo 0x10 > /proc/self/coredump_filter
  		if is_service_running "${PIDFILE}" >/dev/null; then
  			log_verbose "${NAME} is already running..."
-		else
-			[ -d /var/run/${NAME} ] || mkdir -p /var/run/${NAME}
+ 		else
+ 			[ -d /var/run/${NAME} ] || mkdir -p /var/run/${NAME}
 -			[ "x${ENABLE_TMPFS}" = "xyes" ] && prepare_tmpfs ${TMPFS_DIR} ${TMPFS_SIZE}
 +			[ "x${CREATE_TMPFS}" = "xyes" ] && prepare_tmpfs ${TMPFS_DIR} ${TMPFS_SIZE}
-			[ -d "${BASEDIR}/work/Catalina" ] && rm -rf "${BASEDIR}/work/Catalina"
+ 			[ -d "${BASEDIR}/work/Catalina" ] && rm -rf "${BASEDIR}/work/Catalina"
                          log "Hardware type:${HWTYPE}"
-                         check_and_kill_ems_if_running$
-@@ -353,7 +353,6 @@
+                         check_and_kill_ems_if_running
+@@ -353,7 +355,6 @@
  		;;
  	stop)
   	require_root
 -        ulimit -H -c 200
-
+ 
          log_verbose "Backing up ${DATADIR}/system.properties in ${BASEDIR}/etc/system.properties"
          cp -f "${DATADIR}/system.properties" "${BASEDIR}/etc/system.properties"
